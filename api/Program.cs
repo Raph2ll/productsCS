@@ -1,29 +1,17 @@
-using System;
-using MySql.Data.MySqlClient;
-using api.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 public class Program
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        Connection connection = new Connection("localhost", "root", "user123", "product");
-
-        try
-        {
-            MySqlConnection mysqlConnection = connection.GetConnection();
-            connection.CreateDatabase();
-
-            mysqlConnection.Open();
-
-            Console.WriteLine("Conexão bem-sucedida ao banco de dados MySQL.");
-
-           
-
-            mysqlConnection.Close();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Erro ao conectar: {ex.Message}");
-        }
+        CreateHostBuilder(args).Build().Run();
     }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }
