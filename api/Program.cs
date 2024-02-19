@@ -1,6 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using MySql.Data.MySqlClient;
+using System;
 
-app.MapGet("/", () => "Hello World!");
+public class Program
+{
+    static void Main()
+    {
+        string host = "localhost";
+        string database = "product";
+        string username = "root";
+        string password = "user123";
 
-app.Run();
+        Product product = new Product(host, database, username, password);
+
+        try
+        {
+            product.CreateDatabase();
+
+            MySqlConnection mysqlConnection = product.GetConnection();
+            mysqlConnection.Open();
+
+            Console.WriteLine("Conexão bem-sucedida ao banco de dados MySQL.");
+
+            // Criação da tabela
+            product.CreateProductTable();
+
+            mysqlConnection.Close();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao conectar: {ex.Message}");
+        }
+    }
+}
