@@ -1,28 +1,23 @@
-using MySql.Data.MySqlClient;
 using System;
+using MySql.Data.MySqlClient;
+using api.Data;
 
 public class Program
 {
     static void Main()
     {
-        string host = "localhost";
-        string database = "product";
-        string username = "root";
-        string password = "user123";
-
-        Product product = new Product(host, database, username, password);
+        Connection connection = new Connection("localhost", "root", "user123", "product");
 
         try
         {
-            product.CreateDatabase();
+            MySqlConnection mysqlConnection = connection.GetConnection();
+            connection.CreateDatabase();
 
-            MySqlConnection mysqlConnection = product.GetConnection();
             mysqlConnection.Open();
 
             Console.WriteLine("Conexão bem-sucedida ao banco de dados MySQL.");
 
-            // Criação da tabela
-            product.CreateProductTable();
+           
 
             mysqlConnection.Close();
         }
