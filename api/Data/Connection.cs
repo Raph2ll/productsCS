@@ -9,7 +9,7 @@ public class Connection
     private readonly string Password;
     private readonly string Database;
 
-    public Connection(string host,  string username, string password, string database)
+    public Connection(string host, string username, string password, string database)
     {
         Host = host;
         Username = username;
@@ -19,7 +19,7 @@ public class Connection
 
     public MySqlConnection GetConnection()
     {
-        string connectionString = $"Server={Host};Database={Database};User ID={Username};Password={Password};";
+        string connectionString = $"Server={Host};User ID={Username};Password={Password};";
         return new MySqlConnection(connectionString);
     }
     public void CreateDatabase()
@@ -38,10 +38,10 @@ public class Connection
 
                 // Products
                 cmd.CommandText = @"
-                CREATE TABLE IF NOT EXISTS Products (
+                CREATE TABLE IF NOT EXISTS products (
                     Id INT PRIMARY KEY AUTO_INCREMENT,
                     Name VARCHAR(255) NOT NULL,
-                    Price DECIMAL(10, 2) NOT NULL
+                    Price FLOAT(10, 2) NOT NULL
                 )";
                 cmd.ExecuteNonQuery();
             }
