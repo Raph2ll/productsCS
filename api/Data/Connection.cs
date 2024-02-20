@@ -19,7 +19,7 @@ public class Connection
 
     public MySqlConnection GetConnection()
     {
-        string connectionString = $"Server={Host};User ID={Username};Password={Password};";
+        string connectionString = $"Server={Host};Database={Database};User ID={Username};Password={Password};";
         return new MySqlConnection(connectionString);
     }
     public void CreateDatabase()
