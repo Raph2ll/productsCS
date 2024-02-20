@@ -20,8 +20,7 @@ public class ProductService
         using (var dbConnection = _connection.GetConnection())
         {
             dbConnection.Open();
-
-            using (var command = new MySqlCommand("SELECT * FROM Products", dbConnection))
+            using (var command = new MySqlCommand($"SELECT * FROM store.products", dbConnection))
             {
                 using (var reader = command.ExecuteReader())
                 {
@@ -31,9 +30,10 @@ public class ProductService
                         {
                             Id = Convert.ToInt32(reader["Id"]),
                             Name = reader["Name"].ToString(),
-                            Price = reader["Price"] == DBNull.Value ? 0.0 : (double)reader["Price"]
+                            Price = reader["Price"] == DBNull.Value ? 0.0 : Convert.ToDouble(reader["Price"])
                         };
-
+                        product.Price = Math.Round(product.Price, 2);
+                        
                         products.Add(product);
                     }
                 }
