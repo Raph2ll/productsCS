@@ -60,5 +60,21 @@ namespace api.Controller
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPut("{id}")]
+        public ActionResult UpdateProduct(int id, ProductModel updatedProduct)
+        {
+            try
+            {
+                updatedProduct.Id = id;
+                _productService.UpdateProduct(updatedProduct);
+
+                return Ok(updatedProduct);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
     }
 }

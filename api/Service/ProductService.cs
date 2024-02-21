@@ -73,9 +73,23 @@ public class ProductService
                 command.Parameters.AddWithValue("@ProductId", productId);
                 command.ExecuteNonQuery();
             }
-            dbConnection.Close();
         }
     }
 
+    public void UpdateProduct(ProductModel updatedProduct)
+    {
+        using (var dbConnection = _connection.GetConnection())
+        {
+            dbConnection.Open();
+            using (var command = new MySqlCommand("UPDATE store.products SET Name = @Name, Price = @Price WHERE Id = @Id", dbConnection))
+            {
+                command.Parameters.AddWithValue("@Id", updatedProduct.Id);
+                command.Parameters.AddWithValue("@Name", updatedProduct.Name);
+                command.Parameters.AddWithValue("@Price", updatedProduct.Price);
+
+                command.ExecuteNonQuery();
+            }
+        }
+    }
 
 }
