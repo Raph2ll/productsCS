@@ -7,6 +7,7 @@ using api.Data;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using api.Model;
 
 public class Startup
 {
@@ -55,8 +56,17 @@ public class Startup
                 var products = productService.GetAllProducts();
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(products));
             });
+            
+            endpoints.MapPost("/api/products", async context =>
+            {
+                var productService = context.RequestServices.GetRequiredService<ProductService>();
+                var requestBody = await new StreamReader(context.Request.Body).ReadToEndAsync();
 
-            endpoints.MapControllers();
+                var newProducts = JsonConvert.DeserializeObject<List<ProductModel>>(requestBody);
+                productService.CreateProducts(newProducts);
+
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(newProducts));
+            });
         });
     }
 }

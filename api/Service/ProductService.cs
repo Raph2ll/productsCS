@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using api.Data;
 using api.Model;
+using System.Data.Common;
 
 public class ProductService
 {
@@ -33,13 +34,33 @@ public class ProductService
                             Price = reader["Price"] == DBNull.Value ? 0.0 : Convert.ToDouble(reader["Price"])
                         };
                         product.Price = Math.Round(product.Price, 2);
-                        
+
                         products.Add(product);
                     }
                 }
             }
+            dbConnection.Close();
         }
 
         return products;
+
+    }
+    public void CreateProducts(List<ProductModel> newProducts)
+    {
+        using (var dbConnection = _connection.GetConnection())
+        {
+            dbConnection.Open();
+            foreach (var newProduct in newProducts)
+            {
+                using (var command = new MySqlCommand("INSERT INTO store.products(Name, Price) VALUES (@Name, @Price)", dbConnection))
+                {
+                    command.Parameters.AddWithValue("@Name", newProduct.Name);
+                    command.Parameters.AddWithValue("@Price", newProduct.Price);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            dbConnection.Close();
+        }
     }
 }

@@ -31,5 +31,18 @@ namespace api.Controller
                 return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
             }
         }
+        [HttpPost]
+        public ActionResult CreateProduct(List<ProductModel> newProducts)
+        {
+            try
+            {
+                _productService.CreateProducts(newProducts);
+                return Ok(newProducts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
     }
 }
