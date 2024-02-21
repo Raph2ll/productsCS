@@ -63,4 +63,19 @@ public class ProductService
             dbConnection.Close();
         }
     }
+    public void DeleteProductById(int productId)
+    {
+        using (var dbConnection = _connection.GetConnection())
+        {
+            dbConnection.Open();
+            using (var command = new MySqlCommand("DELETE FROM store.products WHERE Id = @ProductId", dbConnection))
+            {
+                command.Parameters.AddWithValue("@ProductId", productId);
+                command.ExecuteNonQuery();
+            }
+            dbConnection.Close();
+        }
+    }
+
+
 }
