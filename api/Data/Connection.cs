@@ -38,6 +38,7 @@ public class Connection
 
                 // Products
                 cmd.CommandText = @"
+                DROP TABLE IF EXISTS products;
                 CREATE TABLE IF NOT EXISTS products (
                     Id INT PRIMARY KEY AUTO_INCREMENT,
                     Name VARCHAR(255) NOT NULL,
