@@ -21,7 +21,7 @@ public class Startup
             connection.InsertDatabase();
             return connection;
         });
-
+        services.AddSingleton<ProductService>();
         services.AddControllers();
     }
 
