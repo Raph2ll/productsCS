@@ -6,6 +6,7 @@ using api.Model;
 
 namespace api.Controller
 {
+
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
@@ -23,14 +24,15 @@ namespace api.Controller
             try
             {
                 var products = _productService.GetAllProducts();
-                return Ok(products);
+                return products;
+
             }
             catch (Exception ex)
             {
-                // Tratar exceções conforme necessário
-                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         [HttpPost]
         public ActionResult CreateProduct(List<ProductModel> newProducts)
         {
@@ -41,7 +43,7 @@ namespace api.Controller
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }

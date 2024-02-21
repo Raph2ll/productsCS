@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using api.Model;
+using api.Controller;
 
 public class Startup
 {
@@ -15,14 +16,12 @@ public class Startup
     {
         services.AddSingleton<Connection>(sp =>
         {
-            // Configurar sua conexão com o banco de dados aqui
             var connection = new Connection("localhost", "root", "user123", "store");
-            connection.CreateDatabase(); // Certifique-se de criar o banco de dados antes de usar a conexão
+            connection.CreateDatabase();
             connection.InsertDatabase();
             return connection;
         });
 
-        services.AddSingleton<ProductService>();
         services.AddControllers();
     }
 
@@ -32,41 +31,14 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
-        else
-        {
-            app.UseExceptionHandler("/Home/Error");
-            app.UseHsts();
-        }
-
-        app.UseHttpsRedirection();
-        app.UseStaticFiles();
 
         app.UseRouting();
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapGet("/", async context =>
-            {
-                await context.Response.WriteAsync("Welcome");
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            endpoints.MapGet("/api/products", async context =>
-            {
-                var productService = context.RequestServices.GetRequiredService<ProductService>();
-                var products = productService.GetAllProducts();
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(products));
-            });
-            
-            endpoints.MapPost("/api/products", async context =>
-            {
-                var productService = context.RequestServices.GetRequiredService<ProductService>();
-                var requestBody = await new StreamReader(context.Request.Body).ReadToEndAsync();
-
-                var newProducts = JsonConvert.DeserializeObject<List<ProductModel>>(requestBody);
-                productService.CreateProducts(newProducts);
-
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(newProducts));
-            });
-        });
     }
 }
