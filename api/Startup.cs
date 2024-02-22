@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using api.Model;
+using api.Storage;
 using api.Controller;
 
 public class Startup
@@ -21,6 +22,7 @@ public class Startup
             connection.InsertDatabase();
             return connection;
         });
+        services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<ProductService>();
         services.AddControllers();
     }
@@ -36,9 +38,9 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
     }
 }
