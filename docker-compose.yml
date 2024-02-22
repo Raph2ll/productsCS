@@ -2,15 +2,18 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:latest
-    container_name: mysqldb
+    image: mysql:8.3
+    container_name: mysql_store
     ports:
       - "3306:3306"
+    expose:
+      - "3306"
     environment:
-      MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: user123
-    volumes:
-      - mysql-data:/var/lib/mysql
 
-volumes:
-  mysql-data:
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
