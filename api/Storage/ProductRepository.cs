@@ -77,7 +77,7 @@ namespace api.Storage
 
         }
 
-        public void Add(List<ProductModel> newProducts)
+        public void Create(List<ProductModel> newProducts)
         {
             using (var dbConnection = _connection.GetConnection())
             {

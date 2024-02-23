@@ -5,7 +5,7 @@ namespace api.Storage
     {
         List<ProductModel> GetAll();
         ProductModel GetById(int id);
-        void Add(List<ProductModel> product);
+        void Create(List<ProductModel> product);
         void Update(ProductModel product);
         void Delete(int id);
     }
