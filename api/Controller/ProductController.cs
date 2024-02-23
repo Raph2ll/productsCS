@@ -18,6 +18,7 @@ namespace api.Controller
             _productService = productService;
         }
 
+
         [HttpGet]
         public ActionResult<IEnumerable<ProductModel>> GetAllProducts()
         {
@@ -39,7 +40,7 @@ namespace api.Controller
             try
             {
                 _productService.CreateProducts(newProducts);
-                return Ok(newProducts);
+                return StatusCode(201, newProducts);
             }
             catch (Exception ex)
             {
