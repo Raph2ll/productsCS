@@ -10,7 +10,8 @@ using System.Collections.Generic;
 using api.Model;
 using api.Storage;
 using api.Controller;
-
+using Microsoft.AspNetCore.Mvc.Filters;
+using api.Controller.Filters;
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
@@ -22,9 +23,14 @@ public class Startup
             connection.InsertDatabase();
             return connection;
         });
+
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<ProductService>();
-        services.AddControllers();
+        
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(new ModelStateValidationFilter());
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
