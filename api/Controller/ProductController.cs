@@ -17,8 +17,6 @@ namespace api.Controller
         {
             _productService = productService;
         }
-
-
         [HttpGet]
         public ActionResult<IEnumerable<ProductModel>> GetAllProducts()
         {
@@ -33,35 +31,19 @@ namespace api.Controller
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
         [HttpPost]
         public ActionResult CreateProduct(List<ProductModel> newProducts)
         {
             try
             {
-                _productService.CreateProducts(newProducts);
-                return StatusCode(201, newProducts);
+                var products = _productService.CreateProducts(newProducts);
+                return StatusCode(201, products);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
-        [HttpDelete("{id}")]
-        public ActionResult DeleteProduct(int id)
-        {
-            try
-            {
-                _productService.DeleteProductById(id);
-                return Ok("Product successfully deleted.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
         [HttpPut("{id}")]
         public ActionResult UpdateProduct(int id, ProductModel updatedProduct)
         {
@@ -71,6 +53,19 @@ namespace api.Controller
                 _productService.UpdateProduct(updatedProduct);
 
                 return Ok(updatedProduct);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        [HttpDelete("{id}")]
+        public ActionResult DeleteProduct(int id)
+        {
+            try
+            {
+                var product = _productService.DeleteProductById(id);
+                return Ok(product);
             }
             catch (Exception ex)
             {
