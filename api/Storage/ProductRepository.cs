@@ -41,7 +41,6 @@ namespace api.Storage
                         }
                     }
                 }
-                dbConnection.Close();
             }
 
             return products;
@@ -92,7 +91,6 @@ namespace api.Storage
                         command.ExecuteNonQuery();
                     }
                 }
-                dbConnection.Close();
             }
         }
 
