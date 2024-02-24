@@ -75,7 +75,43 @@ namespace api.Storage
             return null;
 
         }
+        public List<ProductModel> GetByOrderDesc(int quantity)
+        {
+            var products = new List<ProductModel>();
 
+            using (var dbConnection = _connection.GetConnection())
+            {
+                dbConnection.Open();
+                using (var command = new MySqlCommand(
+                    @"SELECT Id, Name, Price
+                    FROM(
+                        SELECT *
+                        FROM store.products
+                        ORDER BY Id DESC
+                        LIMIT @Quantity
+                    ) AS subquery
+                    ORDER BY Id ASC;", dbConnection))
+                {
+                    command.Parameters.AddWithValue("@Quantity", quantity);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var product = new ProductModel
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = reader["Name"].ToString(),
+                                Price = reader["Price"] == DBNull.Value ? 0.0 : Convert.ToDouble(reader["Price"])
+                            };
+                            product.Price = Math.Round(product.Price, 2);
+                            products.Add(product);
+                        }
+                    }
+                }
+            }
+
+            return products;
+        }
         public void Create(List<ProductModel> newProducts)
         {
             using (var dbConnection = _connection.GetConnection())
