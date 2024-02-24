@@ -61,12 +61,14 @@ namespace api.Storage
                     {
                         if (reader.Read())
                         {
-                            return new ProductModel()
+                            var product = new ProductModel
                             {
                                 Id = Convert.ToInt32(reader["Id"]),
                                 Name = reader["Name"].ToString(),
                                 Price = Convert.IsDBNull(reader["Price"]) ? 0.0 : Convert.ToDouble(reader["Price"])
                             };
+                            product.Price = Math.Round(product.Price, 2);
+                            return product;
                         }
                     }
                 }
