@@ -14,25 +14,25 @@ public class ProductService
     {
         _storage = storage;
     }
-
     public List<ProductModel> GetAllProducts()
     {
         return _storage.GetAll();
     }
-    public void CreateProducts(List<ProductModel> newProducts)
+    public List<ProductModel> CreateProducts(List<ProductModel> newProducts)
     {
         _storage.Create(newProducts);
-        // return newProducts;
+        return _storage.GetByOrderDesc(newProducts.Count);
     }
-    public void UpdateProduct(ProductModel updatedProduct)
+    public ProductModel UpdateProduct(ProductModel updatedProduct)
     {
         _storage.Update(updatedProduct);
-        // return updatedProduct;
+        return _storage.GetById(updatedProduct.Id);
     }
-    public void DeleteProductById(int productId)
+    public ProductModel DeleteProductById(int productId)
     {
+        var product = _storage.GetById(productId);
         _storage.Delete(productId);
-        // return _storage.GetById(productId);
+        return product;
     }
 
 
