@@ -49,6 +49,11 @@ namespace api.Controller
         {
             try
             {
+                if (_productService.GetProductById(id) == null)
+                {
+                    return NotFound("Product Not Found");
+                }
+
                 updatedProduct.Id = id;
                 _productService.UpdateProduct(updatedProduct);
 
@@ -64,6 +69,11 @@ namespace api.Controller
         {
             try
             {
+                if (_productService.GetProductById(id) == null)
+                {
+                    return NotFound("Product Not Found");
+                }
+
                 var product = _productService.DeleteProductById(id);
                 return Ok(product);
             }

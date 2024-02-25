@@ -18,6 +18,10 @@ public class ProductService
     {
         return _storage.GetAll();
     }
+    public ProductModel GetProductById(int id)
+    {
+        return _storage.GetById(id);
+    }
     public List<ProductModel> CreateProducts(List<ProductModel> newProducts)
     {
         _storage.Create(newProducts);
