@@ -23,7 +23,7 @@ namespace api.Controller
             try
             {
                 var products = _productService.GetAllProducts();
-                return products;
+                return Ok(products);
 
             }
             catch (Exception ex)
