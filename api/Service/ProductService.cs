@@ -14,7 +14,7 @@ public class ProductService
     {
         _storage = storage;
     }
-    public List<ProductModel> GetAllProducts()
+    public virtual List<ProductModel> GetAllProducts()
     {
         return _storage.GetAll();
     }
