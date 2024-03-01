@@ -12,6 +12,7 @@ using api.Storage;
 using api.Controller;
 using Microsoft.AspNetCore.Mvc.Filters;
 using api.Controller.Filters;
+using api.Service;
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
@@ -25,7 +26,7 @@ public class Startup
         });
 
         services.AddSingleton<IProductRepository, ProductRepository>();
-        services.AddSingleton<ProductService>();
+        services.AddSingleton<IProductService, ProductService>();
         
         services.AddControllers(options =>
         {
