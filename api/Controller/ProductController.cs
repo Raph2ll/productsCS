@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using api.Data;
 using api.Model;
+using api.Service;
 
 namespace api.Controller
 {
@@ -11,7 +12,7 @@ namespace api.Controller
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly ProductService _productService;
+        private readonly IProductService _productService;
 
         public ProductController(ProductService productService)
         {
