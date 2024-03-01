@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using api.Service;
 using api.Storage;
 using api.Controller;
 using api.Model;
@@ -17,20 +18,20 @@ namespace tests
         public void GetAllProducts_ReturnsListOfProducts()
         {
             // Arrange
-            var productRepositoryMock = new Mock<IProductRepository>();
-            var productServiceMock = new Mock<ProductService>(productRepositoryMock.Object);
-
+            var productServiceMock = new Mock<IProductService>();
             productServiceMock.Setup(x => x.GetAllProducts()).Returns(new List<ProductModel>());
-            var productController = new ProductController(productServiceMock.Object);
+
+            var controller = new ProductController(productServiceMock.Object);
 
             // Act
-            var result = productController.GetAllProducts().Result;
+            var result = controller.GetAllProducts();
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-            var okResult = (OkObjectResult)result;
+            Assert.IsInstanceOfType(result, typeof(ActionResult<IEnumerable<ProductModel>>));
+            var actionResult = (ActionResult<IEnumerable<ProductModel>>)result;
+            var okResult = actionResult.Result as OkObjectResult;
 
-            Assert.IsNotNull(okResult.Value);
+            Assert.IsNotNull(okResult);
             Assert.IsInstanceOfType(okResult.Value, typeof(List<ProductModel>));
         }
     }
