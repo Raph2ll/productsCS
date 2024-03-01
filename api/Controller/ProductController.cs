@@ -14,9 +14,9 @@ namespace api.Controller
     {
         private readonly IProductService _productService;
 
-        public ProductController(ProductService productService)
+        public ProductController(IProductService productService)
         {
-            _productService = productService;
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         }
         [HttpGet]
         public ActionResult<IEnumerable<ProductModel>> GetAllProducts()
