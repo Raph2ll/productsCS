@@ -29,6 +29,7 @@ namespace tests
             // Assert
             Assert.IsInstanceOfType(result, typeof(ActionResult<IEnumerable<ProductModel>>));
             var actionResult = (ActionResult<IEnumerable<ProductModel>>)result;
+            
             var okResult = actionResult.Result as OkObjectResult;
 
             Assert.IsNotNull(okResult);
