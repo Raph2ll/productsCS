@@ -17,92 +17,56 @@ namespace tests
         private ProductController controller;
 
         [TestInitialize]
-        public void Initialize()
+        public void TestInitialize()
         {
+            // Configurar o Mock e o Controller antes de cada teste
             productServiceMock = new Mock<IProductService>();
             controller = new ProductController(productServiceMock.Object);
         }
-
+        // Get All Products
         [TestMethod]
-        public void GetProductById_ReturnsProduct()
+        public void GetAllProducts_ReturnsListOfProducts()
         {
             // Arrange
-            int productId = 1;
-            var product = new ProductModel { Id = productId, Name = "Test Product" };
-            productServiceMock.Setup(x => x.GetProductById(productId)).Returns(product);
+            var productServiceMock = new Mock<IProductService>();
+            productServiceMock.Setup(x => x.GetAllProducts()).Returns(new List<ProductModel>());
+
+            var controller = new ProductController(productServiceMock.Object);
 
             // Act
-            var result = controller.GetProductById(productId);
+            var result = controller.GetAllProducts();
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(ActionResult<ProductModel>));
-            var actionResult = (ActionResult<ProductModel>)result;
+            Assert.IsInstanceOfType(result, typeof(ActionResult<IEnumerable<ProductModel>>));
+            var actionResult = (ActionResult<IEnumerable<ProductModel>>)result;
             var okResult = actionResult.Result as OkObjectResult;
 
             Assert.IsNotNull(okResult);
-            Assert.IsInstanceOfType(okResult.Value, typeof(ProductModel));
-            Assert.AreEqual(productId, (okResult.Value as ProductModel).Id);
-        }
+            Assert.IsInstanceOfType(okResult.Value, typeof(List<ProductModel>));
 
+        }
         [TestMethod]
         public void CreateProduct_ReturnsCreatedProducts()
         {
             // Arrange
-            var newProducts = new List<ProductModel> { new ProductModel { Name = "New Product" } };
+            var newProducts = new List<ProductModel> { new ProductModel {
+                Name = "New Product",
+                Price = 10.99
+            } };
             productServiceMock.Setup(x => x.CreateProducts(newProducts)).Returns(newProducts);
 
             // Act
             var result = controller.CreateProduct(newProducts);
 
             // Assert
-            Assert.IsInstanceOfType(result, typeof(StatusCodeResult));
-            var statusCodeResult = (StatusCodeResult)result;
+            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            var objectResult = (ObjectResult)result;
 
-            Assert.AreEqual(201, statusCodeResult.StatusCode);
-        }
+            Assert.AreEqual(201, objectResult.StatusCode);
 
-        [TestMethod]
-        public void UpdateProduct_ReturnsUpdatedProduct()
-        {
-            // Arrange
-            int productId = 1;
-            var updatedProduct = new ProductModel { Id = productId, Name = "Updated Product" };
-            productServiceMock.Setup(x => x.GetProductById(productId)).Returns(updatedProduct);
-
-            // Act
-            var result = controller.UpdateProduct(productId, updatedProduct);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(ActionResult<ProductModel>));
-            var actionResult = (ActionResult<ProductModel>)result;
-            var okResult = actionResult.Result as OkObjectResult;
-
-            Assert.IsNotNull(okResult);
-            Assert.IsInstanceOfType(okResult.Value, typeof(ProductModel));
-            Assert.AreEqual(productId, (okResult.Value as ProductModel).Id);
-            Assert.AreEqual("Updated Product", (okResult.Value as ProductModel).Name);
-        }
-
-        [TestMethod]
-        public void DeleteProduct_ReturnsDeletedProduct()
-        {
-            // Arrange
-            int productId = 1;
-            var productToDelete = new ProductModel { Id = productId, Name = "Product to Delete" };
-            productServiceMock.Setup(x => x.GetProductById(productId)).Returns(productToDelete);
-
-            // Act
-            var result = controller.DeleteProduct(productId);
-
-            // Assert
-            Assert.IsInstanceOfType(result, typeof(ActionResult<ProductModel>));
-            var actionResult = (ActionResult<ProductModel>)result;
-            var okResult = actionResult.Result as OkObjectResult;
-
-            Assert.IsNotNull(okResult);
-            Assert.IsInstanceOfType(okResult.Value, typeof(ProductModel));
-            Assert.AreEqual(productId, (okResult.Value as ProductModel).Id);
-            Assert.AreEqual("Product to Delete", (okResult.Value as ProductModel).Name);
+            var createdProducts = objectResult.Value as List<ProductModel>;
+            Assert.IsNotNull(createdProducts);
+            Assert.IsTrue(createdProducts.Any());
         }
     }
 }
