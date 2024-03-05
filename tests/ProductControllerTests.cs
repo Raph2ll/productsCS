@@ -7,6 +7,7 @@ using api.Service;
 using api.Storage;
 using api.Controller;
 using api.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace tests
 {
@@ -49,10 +50,14 @@ namespace tests
         public void CreateProduct_ReturnsCreatedProducts()
         {
             // Arrange
-            var newProducts = new List<ProductModel> { new ProductModel {
-                Name = "New Product",
-                Price = 10.99
-            } };
+            var newProducts = new List<ProductModel>
+            {
+                new ProductModel
+                {
+                    Name = "New Product",
+                    Price = 10.99
+                }
+            };
             productServiceMock.Setup(x => x.CreateProducts(newProducts)).Returns(newProducts);
 
             // Act
