@@ -68,5 +68,35 @@ namespace tests
             Assert.IsNotNull(createdProducts);
             Assert.IsTrue(createdProducts.Any());
         }
+        [TestMethod]
+        public void UpdateProduct_ReturnsUpdatedProduct()
+        {
+            // Arrange
+            int productId = 1;
+            var updatedProduct = new ProductModel
+            {
+                Id = productId,
+                Name = "Updated Product",
+                Price = 19.99
+            };
+
+            productServiceMock.Setup(x => x.GetProductById(productId)).Returns(updatedProduct);
+
+            // Act
+            var result = controller.UpdateProduct(productId, updatedProduct);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = (OkObjectResult)result;
+
+            Assert.IsNotNull(okResult.Value);
+            Assert.IsInstanceOfType(okResult.Value, typeof(ProductModel));
+
+            var returnedProduct = (ProductModel)okResult.Value;
+            Assert.AreEqual(productId, returnedProduct.Id);
+            Assert.AreEqual(updatedProduct.Name, returnedProduct.Name);
+            Assert.AreEqual(updatedProduct.Price, returnedProduct.Price);
+        }
+
     }
 }
