@@ -97,6 +97,36 @@ namespace tests
             Assert.AreEqual(updatedProduct.Name, returnedProduct.Name);
             Assert.AreEqual(updatedProduct.Price, returnedProduct.Price);
         }
+        [TestMethod]
+        public void DeleteProduct_ReturnsDeletedProduct()
+        {
+            // Arrange
+            int productId = 1;
+            var existingProduct = new ProductModel
+            {
+                Id = productId,
+                Name = "Existing Product",
+                Price = 29.99
+            };
+
+            productServiceMock.Setup(x => x.GetProductById(productId)).Returns(existingProduct);
+            productServiceMock.Setup(x => x.DeleteProductById(productId)).Returns(existingProduct);
+
+            // Act
+            var result = controller.DeleteProduct(productId);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            var okResult = (OkObjectResult)result;
+
+            Assert.IsNotNull(okResult.Value);
+            Assert.IsInstanceOfType(okResult.Value, typeof(ProductModel));
+
+            var deletedProduct = (ProductModel)okResult.Value;
+            Assert.AreEqual(productId, deletedProduct.Id);
+            Assert.AreEqual(existingProduct.Name, deletedProduct.Name);
+            Assert.AreEqual(existingProduct.Price, deletedProduct.Price);
+        }
 
     }
 }
