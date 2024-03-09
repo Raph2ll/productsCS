@@ -3,13 +3,15 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.3
-    container_name: mysql_store
+    container_name: ${CONTAINER_NAME}
     ports:
       - "3306:3306"
     expose:
       - "3306"
     environment:
-      MYSQL_ROOT_PASSWORD: user123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
   adminer:
     image: adminer
