@@ -13,6 +13,8 @@ using api.Controller;
 using Microsoft.AspNetCore.Mvc.Filters;
 using api.Controller.Filters;
 using api.Service;
+using Microsoft.OpenApi.Models;
+
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
@@ -26,8 +28,12 @@ public class Startup
         });
 
         services.AddSingleton<IProductRepository, ProductRepository>();
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Store", Version = "v1" });
+        });
         services.AddSingleton<IProductService, ProductService>();
-        
+
         services.AddControllers(options =>
         {
             options.Filters.Add(new ModelStateValidationFilter());
@@ -42,6 +48,12 @@ public class Startup
         }
 
         app.UseRouting();
+        app.UseSwagger();
+
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Nome da Sua API V1");
+        });
 
         app.UseEndpoints(endpoints =>
         {
